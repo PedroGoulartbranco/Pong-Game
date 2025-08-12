@@ -39,7 +39,7 @@ def lado_bola():
     return velocidade_x, velocidade_y
 
 def aleatorizar_velocidade_bate():
-    lista_velocidade = [1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7]
+    lista_velocidade = [1, 1.2, 1.3]
     velocidade_x = choice(lista_velocidade)
     velocidade_y = choice(lista_velocidade)
     return velocidade_x, velocidade_y
@@ -98,22 +98,23 @@ while rodando:
     if cordenada_x_bola <= 0:
         gerar_bola = True
 
+    if velocidade_bola_x >= 15:
+        velocidade_bola_x = 11
+    elif velocidade_bola_x <= -15:
+        velocidade_bola_x = -11
+    if velocidade_bola_y >= 15:
+        velocidade_bola_x = 11
+    elif velocidade_bola_y <= -15:
+        velocidade_bola_y = -11
+
     #Verificar se bateu na parede
     if coordenada_y_bola >= 695 or coordenada_y_bola <= 0:
         multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
-        velocidade_bola_x *= (multiplicador_vel_x)
+        
 
         velocidade_bola_y *= -(multiplicador_vel_y)
         print(velocidade_bola_x, velocidade_bola_y)
 
-    if velocidade_bola_x >= 17:
-        velocidade_bola_x = 10
-    elif velocidade_bola_x <= -17:
-        velocidade_bola_x = -10
-    if velocidade_bola_y >= 17:
-        velocidade_bola_x = 10
-    elif velocidade_bola_y <= -17:
-        velocidade_bola_y = -10
 
     #Teclado
     tecla = pygame.key.get_pressed()
