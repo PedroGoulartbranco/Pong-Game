@@ -45,6 +45,7 @@ coordenada_y_bola = 0
 velocidade_bola_x = 10
 velocidade_bola_y = 5
 
+velocidade_jogadores = 7
 
 jogador_1_coordenada_x = 15
 jogador_1_coordenada_y = 290
@@ -78,7 +79,6 @@ while rodando:
         velocidade_bola_x, velocidade_bola_y = lado_bola()
         gerar_bola = False
 
-    print(cordenada_x_bola)
 
     #Verificar se foi gol
     if cordenada_x_bola >= 1280:
@@ -103,7 +103,26 @@ while rodando:
         velocidade_bola_y = -10
 
     #Teclado
-    if 
+    tecla = pygame.key.get_pressed()
+    if tecla[pygame.K_w]:
+        jogador_1_coordenada_y -= velocidade_jogadores
+    if tecla[pygame.K_s]:
+        jogador_1_coordenada_y += velocidade_jogadores
+    if tecla[pygame.K_UP]:
+        jogador_2_coordenada_y -= velocidade_jogadores
+    if tecla[pygame.K_DOWN]:
+        jogador_2_coordenada_y += velocidade_jogadores
+
+    #Limite dos jogadores
+    if jogador_1_coordenada_y >= 600:
+        jogador_1_coordenada_y = 600
+    if jogador_1_coordenada_y <= 0:
+        jogador_1_coordenada_y = 0
+    
+    if jogador_2_coordenada_y >= 600:
+        jogador_2_coordenada_y = 600
+    if jogador_2_coordenada_y <= 0:
+        jogador_2_coordenada_y = 0
 
     pygame.display.flip()
 
