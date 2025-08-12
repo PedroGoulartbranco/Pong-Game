@@ -143,13 +143,12 @@ while rodando:
     if jogador_1_colisao.colliderect(colisao_bola):
         multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
         velocidade_bola_x *= -(multiplicador_vel_x)
-        velocidade_bola_y *= (multiplicador_vel_y)
-        print("tocou")
+       
 
     if jogador_2_colisao.colliderect(colisao_bola):
         multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
         velocidade_bola_x *= -(multiplicador_vel_x)
-        velocidade_bola_y *= (multiplicador_vel_y)
+        
 
 
     pygame.display.flip()
