@@ -8,6 +8,14 @@ rodando = True
 
 gerar_bola = True
 
+bola = pygame.image.load("imagens/bola.png").convert_alpha()
+bola_parte_visivel = bola.get_bounding_rect()
+bola = bola.subsurface(bola_parte_visivel).copy()
+bola= pygame.transform.scale(bola, (50, 50))
+
+fundo = pygame.image.load("imagens/gramado.png")
+fundo = pygame.transform.scale(fundo, (1280, 720))
+
 def recolocar_bola():
     cord_x, cord_y = (640, 360)
     return cord_x, cord_y
@@ -15,7 +23,7 @@ def recolocar_bola():
 def lado_bola():
     direta_esqurda = ["direita", "esquerda"]
     direita_ou_esqurda = choice(direta_esqurda)
-    diagonais = ["cima", "baixo", "reta"]
+    diagonais = ["cima", "baixo"]
     direcao = choice(diagonais)
 
     if direita_ou_esqurda == "direita":
@@ -27,8 +35,6 @@ def lado_bola():
         velocidade_y = -5
     elif direcao == "baixo":
         velocidade_y = 5
-    else:
-        velocidade_y = 0
 
     return velocidade_x, velocidade_y
 
@@ -58,17 +64,20 @@ while rodando:
         if event.type == pygame.QUIT:
             rodando = False
 
-    tela.fill("white")
+    tela.blit(fundo, (0, 0))
 
     pygame.draw.rect(tela, "black", (640, 0, 1, 720)) # Desenha uma linha reta
 
     pygame.draw.rect(tela, "black", (0, 0, 1, 720)) # Desenha uma linha reta
 
-    pygame.draw.circle(tela, "black", (cordenada_x_bola, coordenada_y_bola), 25) #Circulo
+    
 
     pygame.draw.rect(tela, "black", (jogador_1_coordenada_x, jogador_1_coordenada_y, 10, 120)) #Jogador 1 desenho
 
     pygame.draw.rect(tela, "black", (jogador_2_coordenada_x, jogador_2_coordenada_y, 10, 120)) #Jogador 2 desenho
+
+    jogador_1_colisao = pygame.Rect(jogador_1_coordenada_x, jogador_1_coordenada_y, 10, 120)
+    jogador_2_colisao = pygame.Rect(jogador_2_coordenada_x, jogador_2_coordenada_y, 10, 120)
 
 
     cordenada_x_bola += velocidade_bola_x
@@ -79,6 +88,9 @@ while rodando:
         velocidade_bola_x, velocidade_bola_y = lado_bola()
         gerar_bola = False
 
+    colisao_bola = pygame.Rect(cordenada_x_bola, coordenada_y_bola, bola.get_width(), bola.get_height())
+    tela.blit(bola, (cordenada_x_bola, coordenada_y_bola))
+
 
     #Verificar se foi gol
     if cordenada_x_bola >= 1280:
@@ -87,9 +99,10 @@ while rodando:
         gerar_bola = True
 
     #Verificar se bateu na parede
-    if coordenada_y_bola >= 695 or coordenada_y_bola <= 25:
+    if coordenada_y_bola >= 695 or coordenada_y_bola <= 0:
         multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
         velocidade_bola_x *= (multiplicador_vel_x)
+
         velocidade_bola_y *= -(multiplicador_vel_y)
         print(velocidade_bola_x, velocidade_bola_y)
 
@@ -123,6 +136,20 @@ while rodando:
         jogador_2_coordenada_y = 600
     if jogador_2_coordenada_y <= 0:
         jogador_2_coordenada_y = 0
+
+    #Verificar se colide com os jogadores
+
+    if jogador_1_colisao.colliderect(colisao_bola):
+        multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
+        velocidade_bola_x *= -(multiplicador_vel_x)
+        velocidade_bola_y *= (multiplicador_vel_y)
+        print("tocou")
+
+    if jogador_2_colisao.colliderect(colisao_bola):
+        multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
+        velocidade_bola_x *= -(multiplicador_vel_x)
+        velocidade_bola_y *= (multiplicador_vel_y)
+
 
     pygame.display.flip()
 
