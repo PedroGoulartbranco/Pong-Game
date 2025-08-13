@@ -8,6 +8,9 @@ rodando = True
 
 gerar_bola = True
 
+pontuacao_jogador_1 = 0
+pontuacao_jogador_2 = 0
+
 bola = pygame.image.load("imagens/bola.png").convert_alpha()
 bola_parte_visivel = bola.get_bounding_rect()
 bola = bola.subsurface(bola_parte_visivel).copy()
@@ -94,8 +97,10 @@ while rodando:
 
     #Verificar se foi gol
     if cordenada_x_bola >= 1280:
+        pontuacao_jogador_1 += 1
         gerar_bola = True
     if cordenada_x_bola <= 0:
+        pontuacao_jogador_2 += 1
         gerar_bola = True
 
     if velocidade_bola_x >= 15:
