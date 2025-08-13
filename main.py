@@ -6,6 +6,8 @@ tela = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 rodando = True
 
+font_pontuacao = pygame.font.Font(None, 900)
+
 gerar_bola = True
 
 pontuacao_jogador_1 = 0
@@ -47,12 +49,13 @@ def aleatorizar_velocidade_bate():
     velocidade_y = choice(lista_velocidade)
     return velocidade_x, velocidade_y
   
-
+coordenada_pont_jogador_1 = (100, 100)
+coordenada_pont_jogador_2 = (800, 100)
 
 cordenada_x_bola = 0
 coordenada_y_bola = 0
-velocidade_bola_x = 10
-velocidade_bola_y = 5
+velocidade_bola_x = 12
+velocidade_bola_y = 8
 
 velocidade_jogadores = 7
 
@@ -86,6 +89,20 @@ while rodando:
     cordenada_x_bola += velocidade_bola_x
     coordenada_y_bola += velocidade_bola_y
 
+    pontuacao_string_jogador_1 = str(pontuacao_jogador_1)
+    pontuacao_string_jogador_2 = str(pontuacao_jogador_2)
+
+    converter_jogador_1 = font_pontuacao.render(pontuacao_string_jogador_1, True, "#666666")
+    converter_jogador_2 = font_pontuacao.render(pontuacao_string_jogador_2, True, "#666666")
+
+    converter_jogador_1.set_alpha(128)
+    converter_jogador_2.set_alpha(128)
+
+    tela.blit(converter_jogador_1, coordenada_pont_jogador_1)
+    tela.blit(converter_jogador_2, coordenada_pont_jogador_2)
+
+
+
     if gerar_bola:
         cordenada_x_bola, coordenada_y_bola = recolocar_bola()
         velocidade_bola_x, velocidade_bola_y = lado_bola()
@@ -108,7 +125,7 @@ while rodando:
     elif velocidade_bola_x <= -15:
         velocidade_bola_x = -11
     if velocidade_bola_y >= 15:
-        velocidade_bola_x = 11
+        velocidade_bola_y = 11
     elif velocidade_bola_y <= -15:
         velocidade_bola_y = -11
 
@@ -154,6 +171,9 @@ while rodando:
         multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
         velocidade_bola_x *= -(multiplicador_vel_x)
         
+    if pontuacao_jogador_1 == 3 or pontuacao_jogador_2 == 3:
+        pontuacao_jogador_1 = 0
+        pontuacao_jogador_2 = 0
 
 
     pygame.display.flip()
