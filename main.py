@@ -7,7 +7,7 @@ clock = pygame.time.Clock()
 rodando = True
 
 font_pontuacao = pygame.font.Font(None, 900)
-font_botao = pygame.font.Font("fontes/PressStart2P-Regular.ttf")
+font_botao = pygame.font.Font("fontes/PressStart2P-Regular.ttf", 25)
 
 gerar_bola = True
 
@@ -17,7 +17,7 @@ pontuacao_jogador_2 = 0
 bola = pygame.image.load("imagens/bola.png").convert_alpha()
 bola_parte_visivel = bola.get_bounding_rect()
 bola = bola.subsurface(bola_parte_visivel).copy()
-bola= pygame.transform.scale(bola, (50, 50))
+bola= pygame.transform.scale(bola, (60, 60))
 
 botao_R = pygame.image.load("imagens/R.png").convert_alpha()
 botao_R_visivel= botao_R.get_bounding_rect()
@@ -29,8 +29,8 @@ botao_Z_visivel= botao_Z.get_bounding_rect()
 botao_Z= botao_Z.subsurface(botao_R_visivel).copy()
 botao_Z= pygame.transform.scale(botao_Z, (100, 100))
 
-coordenada_botao_R = (300, 100)
-coordenada_botao_Z = (300, 300)
+coordenada_botao_R = (300, 250)
+coordenada_botao_Z = (300, 450)
 
 fundo = pygame.image.load("imagens/gramado.png")
 fundo = pygame.transform.scale(fundo, (1280, 720))
@@ -63,7 +63,7 @@ def aleatorizar_velocidade_bate():
     velocidade_y = choice(lista_velocidade)
     return velocidade_x, velocidade_y
   
-coordenada_pont_jogador_1 = (100, 100)
+coordenada_pont_jogador_1 = (150, 100)
 coordenada_pont_jogador_2 = (800, 100)
 
 cordenada_x_bola = 0
@@ -114,8 +114,7 @@ while rodando:
             velocidade_bola_x, velocidade_bola_y = lado_bola()
             gerar_bola = False
 
-        colisao_bola = pygame.Rect(cordenada_x_bola, coordenada_y_bola, bola.get_width(), bola.get_height())
-        tela.blit(bola, (cordenada_x_bola, coordenada_y_bola))
+        
 
 
         #Verificar se foi gol
@@ -166,15 +165,7 @@ while rodando:
         if jogador_2_coordenada_y <= 0:
             jogador_2_coordenada_y = 0
 
-        #Verificar se colide com os jogadores
 
-        if jogador_1_colisao.colliderect(colisao_bola):
-            multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
-            velocidade_bola_x *= -(multiplicador_vel_x)
-    
-        if jogador_2_colisao.colliderect(colisao_bola):
-            multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
-            velocidade_bola_x *= -(multiplicador_vel_x)
             
         pontuacao_string_jogador_1 = str(pontuacao_jogador_1)
         pontuacao_string_jogador_2 = str(pontuacao_jogador_2)
@@ -188,6 +179,18 @@ while rodando:
         tela.blit(converter_jogador_1, coordenada_pont_jogador_1)
         tela.blit(converter_jogador_2, coordenada_pont_jogador_2)
 
+        colisao_bola = pygame.Rect(cordenada_x_bola, coordenada_y_bola, bola.get_width(), bola.get_height())
+        tela.blit(bola, (cordenada_x_bola, coordenada_y_bola))
+
+                #Verificar se colide com os jogadores
+        if jogador_1_colisao.colliderect(colisao_bola):
+            multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
+            velocidade_bola_x *= -(multiplicador_vel_x)
+    
+        if jogador_2_colisao.colliderect(colisao_bola):
+            multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
+            velocidade_bola_x *= -(multiplicador_vel_x)
+
         if pontuacao_jogador_1 == 3 or pontuacao_jogador_2 == 3:
             pontuacao_jogador_1 = 0
             pontuacao_jogador_2 = 0
@@ -200,6 +203,18 @@ while rodando:
             rodando = False
         tela.blit(botao_R, coordenada_botao_R)
         tela.blit(botao_Z, coordenada_botao_Z)
+
+        texto_r = "Aperte R para uma nova partida"
+        texto_z = "Aperte Z para sair"
+
+        coordenada_texto_r = (420, 300)
+        coordenada_texto_z = (420, 500)
+
+        converter_texto_r = font_botao.render(texto_r, True, "white")
+        converter_texto_z = font_botao.render(texto_z, True, "white")
+
+        tela.blit(converter_texto_r, coordenada_texto_r)
+        tela.blit(converter_texto_z, coordenada_texto_z)
 
     pygame.display.flip()
 
