@@ -1,7 +1,5 @@
 # Pong Game 🏓
 
-![Screenshot do Pong](imagens/bola.png)
-
 Um remake simples do clássico jogo **Pong** feito em Python com Pygame.  
 Desafie-se sozinho ou contra um amigo e tente marcar 3 pontos primeiro!
 
