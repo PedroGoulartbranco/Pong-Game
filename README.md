@@ -24,3 +24,7 @@ Desafie-se sozinho ou contra um amigo e tente marcar 3 pontos primeiro!
 1. Clone este repositório:  
    ```bash
    git clone https://github.com/seu-usuario/pong-game.git
+
+2. Instalar a biblioteca Pygame:
+   ```bash
+   pip install pygame
