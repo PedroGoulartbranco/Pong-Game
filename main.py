@@ -2,24 +2,33 @@ import pygame
 from random import choice
 
 pygame.init()
+pygame.mixer.init() #Faz as musicas funcionarem
 tela = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 rodando = True
 
 pygame.display.set_caption("Pong Game") 
 
+icone = pygame.image.load("imagens/bola.png")
+pygame.display.set_icon(icone)
+
 font_pontuacao = pygame.font.Font(None, 900)
 font_botao = pygame.font.Font("fontes/PressStart2P-Regular.ttf", 25)
-
-gerar_bola = True
 
 pontuacao_jogador_1 = 0
 pontuacao_jogador_2 = 0
 
+pygame.mixer.music.load("audio/musica.mp3")
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
+
+som_gol = pygame.mixer.Sound("audio/gol.mp3")
+som_gol.set_volume(0.5)
+
 bola = pygame.image.load("imagens/bola.png").convert_alpha()
 bola_parte_visivel = bola.get_bounding_rect()
 bola = bola.subsurface(bola_parte_visivel).copy()
-bola= pygame.transform.scale(bola, (60, 60))
+bola= pygame.transform.scale(bola, (50, 50))
 
 botao_R = pygame.image.load("imagens/R.png").convert_alpha()
 botao_R_visivel= botao_R.get_bounding_rect()
@@ -64,6 +73,11 @@ def aleatorizar_velocidade_bate():
     velocidade_x = choice(lista_velocidade)
     velocidade_y = choice(lista_velocidade)
     return velocidade_x, velocidade_y
+
+def gerar_bola(cordenada_x_bola, coordenada_y_bola):
+    cordenada_x_bola, coordenada_y_bola = recolocar_bola()
+    velocidade_bola_x, velocidade_bola_y = lado_bola()
+    return cordenada_x_bola, coordenada_y_bola, velocidade_bola_x, velocidade_bola_y
   
 coordenada_pont_jogador_1 = (150, 100)
 coordenada_pont_jogador_2 = (800, 100)
@@ -81,6 +95,7 @@ jogador_1_coordenada_y = 290
 jogador_2_coordenada_x = 1255
 jogador_2_coordenada_y = 290
 
+tem_que_gerar_bola = True
 
 partida_rodando = True
 
@@ -97,7 +112,9 @@ while rodando:
 
         pygame.draw.rect(tela, "black", (0, 0, 1, 720)) # Desenha uma linha reta
 
-        
+        if tem_que_gerar_bola:
+            cordenada_x_bola, coordenada_y_bola, velocidade_bola_x, velocidade_bola_y = gerar_bola(cordenada_x_bola, coordenada_y_bola)
+            tem_que_gerar_bola = False
 
         pygame.draw.rect(tela, "black", (jogador_1_coordenada_x, jogador_1_coordenada_y, 10, 120)) #Jogador 1 desenho
 
@@ -110,31 +127,32 @@ while rodando:
         cordenada_x_bola += velocidade_bola_x
         coordenada_y_bola += velocidade_bola_y
 
-
-        if gerar_bola:
-            cordenada_x_bola, coordenada_y_bola = recolocar_bola()
-            velocidade_bola_x, velocidade_bola_y = lado_bola()
-            gerar_bola = False
-
-        
-
+        colisao_bola = pygame.Rect(cordenada_x_bola, coordenada_y_bola, bola.get_width(), bola.get_height())
 
         #Verificar se foi gol
         if cordenada_x_bola >= 1280:
             pontuacao_jogador_1 += 1
-            gerar_bola = True
+            som_gol.play()
+            cordenada_x_bola, coordenada_y_bola = recolocar_bola()
+            velocidade_bola_x, velocidade_bola_y = lado_bola()
+            continue
         elif cordenada_x_bola <= 0:
             pontuacao_jogador_2 += 1
-            gerar_bola = True
+            som_gol.play()
+            cordenada_x_bola, coordenada_y_bola = recolocar_bola()
+            velocidade_bola_x, velocidade_bola_y = lado_bola()
+            continue
         else:
             #Verificar se colide com os jogadores
             if jogador_1_colisao.colliderect(colisao_bola):
                 multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
                 velocidade_bola_x *= -(multiplicador_vel_x)
+                cordenada_x_bola  = jogador_1_coordenada_x + 10
         
             if jogador_2_colisao.colliderect(colisao_bola):
                 multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
                 velocidade_bola_x *= -(multiplicador_vel_x)
+                cordenada_x_bola = jogador_2_coordenada_x - bola.get_width()
 
         if velocidade_bola_x >= 15:
             velocidade_bola_x = 11
@@ -190,7 +208,6 @@ while rodando:
         tela.blit(converter_jogador_1, coordenada_pont_jogador_1)
         tela.blit(converter_jogador_2, coordenada_pont_jogador_2)
 
-        colisao_bola = pygame.Rect(cordenada_x_bola, coordenada_y_bola, bola.get_width(), bola.get_height())
         tela.blit(bola, (cordenada_x_bola, coordenada_y_bola))
 
         if pontuacao_jogador_1 == 3 or pontuacao_jogador_2 == 3:
