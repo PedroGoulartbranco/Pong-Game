@@ -6,6 +6,8 @@ tela = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 rodando = True
 
+pygame.display.set_caption("Pong Game") 
+
 font_pontuacao = pygame.font.Font(None, 900)
 font_botao = pygame.font.Font("fontes/PressStart2P-Regular.ttf", 25)
 
@@ -121,9 +123,18 @@ while rodando:
         if cordenada_x_bola >= 1280:
             pontuacao_jogador_1 += 1
             gerar_bola = True
-        if cordenada_x_bola <= 0:
+        elif cordenada_x_bola <= 0:
             pontuacao_jogador_2 += 1
             gerar_bola = True
+        else:
+            #Verificar se colide com os jogadores
+            if jogador_1_colisao.colliderect(colisao_bola):
+                multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
+                velocidade_bola_x *= -(multiplicador_vel_x)
+        
+            if jogador_2_colisao.colliderect(colisao_bola):
+                multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
+                velocidade_bola_x *= -(multiplicador_vel_x)
 
         if velocidade_bola_x >= 15:
             velocidade_bola_x = 11
@@ -181,15 +192,6 @@ while rodando:
 
         colisao_bola = pygame.Rect(cordenada_x_bola, coordenada_y_bola, bola.get_width(), bola.get_height())
         tela.blit(bola, (cordenada_x_bola, coordenada_y_bola))
-
-                #Verificar se colide com os jogadores
-        if jogador_1_colisao.colliderect(colisao_bola):
-            multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
-            velocidade_bola_x *= -(multiplicador_vel_x)
-    
-        if jogador_2_colisao.colliderect(colisao_bola):
-            multiplicador_vel_x, multiplicador_vel_y = aleatorizar_velocidade_bate()
-            velocidade_bola_x *= -(multiplicador_vel_x)
 
         if pontuacao_jogador_1 == 3 or pontuacao_jogador_2 == 3:
             pontuacao_jogador_1 = 0
