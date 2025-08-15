@@ -69,7 +69,7 @@ def lado_bola():
     return velocidade_x, velocidade_y
 
 def aleatorizar_velocidade_bate():
-    lista_velocidade = [1, 1.2, 1.3]
+    lista_velocidade = [1, 1.1, 1.12, 1.5 ,1.2,]
     velocidade_x = choice(lista_velocidade)
     velocidade_y = choice(lista_velocidade)
     return velocidade_x, velocidade_y
